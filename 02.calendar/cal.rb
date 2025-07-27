@@ -4,17 +4,17 @@ require "date"
 require "optparse"
 
 opt = OptionParser.new
-paired_year_and_manth ={}
-opt.on("-y year", Integer) {|year| paired_year_and_manth[:y] = year}
-opt.on("-m month", Integer) {|month| paired_year_and_manth[:m] = month}
+paired_year_and_month = {}
+opt.on("-y year", Integer) {|year| paired_year_and_month[:y] = year}
+opt.on("-m month", Integer) {|month| paired_year_and_month[:m] = month}
 opt.parse(ARGV)
 
-if (paired_year_and_manth[:y] == nil) && (paired_year_and_manth[:m] == nil)
+if (paired_year_and_month[:y] == nil) && (paired_year_and_month[:m] == nil)
   decided_year = Date.today.year
   decided_month = Date.today.month
 else
-  decided_year = paired_year_and_manth[:y]
-  decided_month = paired_year_and_manth[:m]
+  decided_year = paired_year_and_month[:y]
+  decided_month = paired_year_and_month[:m]
 end
 
 first_date = Date.new(decided_year, decided_month, 1)
