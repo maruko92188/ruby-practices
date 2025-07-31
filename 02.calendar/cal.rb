@@ -9,19 +9,22 @@ opt.on("-y year", Integer) {|year| paired_year_and_month[:y] = year}
 opt.on("-m month", Integer) {|month| paired_year_and_month[:m] = month}
 opt.parse(ARGV)
 
-if (paired_year_and_month[:y] == nil) || (paired_year_and_month[:m] == nil)
+if paired_year_and_month[:y] == nil
   decided_year = Date.today.year
-  decided_month = Date.today.month
 else
   decided_year = paired_year_and_month[:y]
+end
+
+if paired_year_and_month[:m] == nil
+  decided_month = Date.today.month
+else
   decided_month = paired_year_and_month[:m]
 end
 
 first_date = Date.new(decided_year, decided_month, 1)
 last_date = Date.new(decided_year, decided_month, -1)
 
-displayed_year_and_month = "#{first_date.month}月 #{first_date.year}"
-puts displayed_year_and_month.center(20)
+puts "#{first_date.month}月 #{first_date.year}".center(20)
 
 weekdays = ["日", "月", "火", "水", "木", "金", "土"]
 weekdays.each {|weekday| print weekday.ljust(2)}
