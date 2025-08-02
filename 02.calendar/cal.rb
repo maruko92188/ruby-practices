@@ -9,8 +9,8 @@ opt.on("-y year", Integer) {|year| paired_year_and_month[:y] = year}
 opt.on("-m month", Integer) {|month| paired_year_and_month[:m] = month}
 opt.parse(ARGV)
 
-decided_year = paired_year_and_month[:y].nil? ? Date.today.year : paired_year_and_month[:y]
-decided_month = paired_year_and_month[:m].nil? ? Date.today.month : paired_year_and_month[:m]
+decided_year = paired_year_and_month[:y] || Date.today.year
+decided_month = paired_year_and_month[:m] || Date.today.month
 
 first_date = Date.new(decided_year, decided_month, 1)
 last_date = Date.new(decided_year, decided_month, -1)
