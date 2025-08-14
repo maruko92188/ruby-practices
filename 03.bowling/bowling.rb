@@ -23,4 +23,4 @@ additonal_point = calculation_frames[0..8].each_with_index.sum do |bonus_frame, 
   end
 end
 
-puts "スコアは#{ordinary_point + additonal_point}です。"
+puts ordinary_point + additonal_point
