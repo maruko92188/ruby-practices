@@ -5,11 +5,11 @@ COLUMNS = 3
 COLUMNS_DISTANCE = 5
 
 def main
-  longest_string = file_names.max_by(&:size)
-  string_width = longest_string.size + COLUMNS_DISTANCE
+  longest_file_name = file_names.max_by(&:size)
+  file_name_width = longest_file_name.size + COLUMNS_DISTANCE
   make_output_file_names.each do |row|
     row.each do |file_name|
-      print file_name.to_s.ljust(string_width)
+      print file_name.to_s.ljust(file_name_width)
     end
     puts
   end
