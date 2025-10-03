@@ -4,7 +4,7 @@
 COLUMNS = 3
 COLUMNS_DISTANCE = 5
 
-def output(make_output_file_names, file_names)
+def main
   longest_string = file_names.max_by(&:size)
   string_width = longest_string.size + COLUMNS_DISTANCE
   make_output_file_names.each do |row|
@@ -27,4 +27,4 @@ def file_names
   Dir['*'].sort_by(&:downcase)
 end
 
-output(make_output_file_names, file_names)
+main
