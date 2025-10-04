@@ -16,9 +16,10 @@ def main
 end
 
 def build_output_file_names
-  rows = file_names.size.ceildiv(COLUMNS)
-  additional_blanks = COLUMNS * rows - file_names.size
-  full_file_names = file_names + Array.new(additional_blanks)
+  created_file_names = file_names
+  rows = created_file_names.size.ceildiv(COLUMNS)
+  additional_blanks = COLUMNS * rows - created_file_names.size
+  full_file_names = created_file_names + Array.new(additional_blanks)
   sliced_file_names = full_file_names.each_slice(rows).to_a
   sliced_file_names.transpose
 end
