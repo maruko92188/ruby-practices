@@ -5,6 +5,7 @@ COLUMNS = 3
 COLUMNS_DISTANCE = 5
 
 def main
+  return exit if file_names.empty?
   longest_file_name = file_names.max_by(&:size)
   file_name_width = longest_file_name.size + COLUMNS_DISTANCE
   build_output_file_names.each do |row|
