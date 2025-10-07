@@ -6,10 +6,11 @@ COLUMNS = 3
 def main
   created_file_names = file_names
   return if created_file_names.empty?
+
   width = created_file_names.max_by(&:size).size
   build_output_file_names(created_file_names).each do |row|
     row.each do |file_name|
-      print file_name.to_s.ljust(width) + "\t"
+      print "#{file_name.to_s.ljust(width)}\t"
     end
     puts
   end
