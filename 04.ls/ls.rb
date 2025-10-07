@@ -6,7 +6,7 @@ COLUMNS_DISTANCE = 5
 
 def main
   created_file_names = file_names
-  return exit if created_file_names.empty?
+  return if created_file_names.empty?
   longest_file_name = created_file_names.max_by(&:size)
   width = longest_file_name.size + COLUMNS_DISTANCE
   build_output_file_names(created_file_names).each do |row|
