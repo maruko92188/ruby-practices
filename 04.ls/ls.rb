@@ -13,7 +13,7 @@ def main
     last_index = row.size
     row.each.with_index(1) do |file_name, index|
       tab_count = longest_file_name.div(TAB_SPACE) + 1 - file_name.to_s.size.div(TAB_SPACE)
-      print index == last_index ? 'file_name' : "#{file_name}#{"\t" * tab_count}"
+      print index == last_index ? file_name : "#{file_name}#{"\t" * tab_count}"
     end
     puts
   end
