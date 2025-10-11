@@ -4,11 +4,11 @@
 COLUMNS = 3
 
 def main
-  created_file_names = file_names
-  return if created_file_names.empty?
+  file_names = create_file_names
+  return if file_names.empty?
 
-  width = created_file_names.max_by(&:size).size
-  build_output_file_names(created_file_names).each do |row|
+  width = file_names.max_by(&:size).size
+  build_file_names_table(file_names).each do |row|
     row.each do |file_name|
       print "#{file_name.to_s.ljust(width)}\t"
     end
@@ -16,15 +16,15 @@ def main
   end
 end
 
-def build_output_file_names(created_file_names)
-  rows = created_file_names.size.ceildiv(COLUMNS)
-  additional_blanks = COLUMNS * rows - created_file_names.size
-  full_file_names = created_file_names + Array.new(additional_blanks)
+def build_file_names_table(file_names)
+  rows = file_names.size.ceildiv(COLUMNS)
+  additional_blanks = COLUMNS * rows - file_names.size
+  full_file_names = file_names + Array.new(additional_blanks)
   sliced_file_names = full_file_names.each_slice(rows).to_a
   sliced_file_names.transpose
 end
 
-def file_names
+def create_file_names
   Dir['*'].sort_by(&:downcase)
 end
 
