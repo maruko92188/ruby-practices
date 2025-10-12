@@ -9,10 +9,11 @@ def main
   return if file_names.empty?
 
   longest_file_name = file_names.max_by(&:size).size
+  column_width = longest_file_name.div(TAB_WIDTH) + 1
   build_file_names_table(file_names).each do |row|
     last_columns_number = row.size
     row.each.with_index(1) do |file_name, index|
-      tab_count = longest_file_name.div(TAB_WIDTH) + 1 - file_name.to_s.size.div(TAB_WIDTH)
+      tab_count = column_width - file_name.to_s.size.div(TAB_WIDTH)
       print index == last_columns_number ? file_name : "#{file_name}#{"\t" * tab_count}"
     end
     puts
