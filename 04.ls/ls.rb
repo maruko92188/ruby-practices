@@ -8,8 +8,7 @@ def main
   file_names = create_file_names
   return if file_names.empty?
 
-  longest_file_name = file_names.max_by(&:size).size
-  column_width = longest_file_name.div(TAB_WIDTH) + 1
+  column_width = calculate_column_width(file_names)
   build_file_names_table(file_names).each do |row|
     last_columns_number = row.size
     row.each.with_index(1) do |file_name, index|
@@ -18,6 +17,11 @@ def main
     end
     puts
   end
+end
+
+def calculate_column_width(file_names)
+  longest_file_name = file_names.max_by(&:size).size
+  longest_file_name.div(TAB_WIDTH) + 1
 end
 
 def build_file_names_table(file_names)
