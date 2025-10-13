@@ -20,12 +20,12 @@ end
 def build_file_names_table(file_names)
   rows = file_names.size.ceildiv(COLUMNS)
   additional_blanks = COLUMNS * rows - file_names.size
-  full_file_names = add_tab_character(file_names) + Array.new(additional_blanks)
+  full_file_names = add_tab_characters(file_names) + Array.new(additional_blanks)
   sliced_file_names = full_file_names.each_slice(rows).to_a
   sliced_file_names.transpose
 end
 
-def add_tab_character(file_names)
+def add_tab_characters(file_names)
   column_width = calculate_column_width(file_names)
   file_names.map do |file_name|
     tab_count = column_width - file_name.size.div(TAB_WIDTH)
