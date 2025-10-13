@@ -13,6 +13,10 @@ def main
   end
 end
 
+def search_file_names
+  Dir['*'].sort_by(&:downcase)
+end
+
 def build_file_names_table(file_names)
   rows = file_names.size.ceildiv(COLUMNS)
   additional_blanks = COLUMNS * rows - file_names.size
@@ -32,10 +36,6 @@ end
 def calculate_column_width(file_names)
   longest_file_name = file_names.max_by(&:size).size
   longest_file_name.div(TAB_WIDTH) + 1
-end
-
-def search_file_names
-  Dir['*'].sort_by(&:downcase)
 end
 
 main
