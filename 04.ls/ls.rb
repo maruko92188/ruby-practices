@@ -5,7 +5,7 @@ COLUMNS = 3
 TAB_WIDTH = 8
 
 def main
-  file_names = create_file_names
+  file_names = search_file_names
   return if file_names.empty?
 
   column_width = calculate_column_width(file_names)
@@ -32,7 +32,7 @@ def build_file_names_table(file_names)
   sliced_file_names.transpose
 end
 
-def create_file_names
+def search_file_names
   Dir['*'].sort_by(&:downcase)
 end
 
