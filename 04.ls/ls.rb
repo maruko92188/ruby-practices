@@ -4,6 +4,8 @@
 COLUMNS = 3
 TAB_WIDTH = 8
 
+require 'optparse'
+
 def main
   file_names = search_file_names
   return if file_names.empty?
@@ -14,7 +16,9 @@ def main
 end
 
 def search_file_names
-  Dir['*'].sort_by(&:downcase)
+  options = ARGV.getopts('a')
+  raw_file_names = options['a'] ? Dir.entries('.') : Dir['*']
+  raw_file_names.sort_by(&:downcase)
 end
 
 def build_file_names_table(file_names)
