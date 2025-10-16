@@ -1,10 +1,10 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'optparse'
+
 COLUMNS = 3
 TAB_WIDTH = 8
-
-require 'optparse'
 
 def main
   file_names = search_file_names
