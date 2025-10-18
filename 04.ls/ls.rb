@@ -1,6 +1,8 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'optparse'
+
 COLUMNS = 3
 TAB_WIDTH = 8
 
@@ -14,7 +16,9 @@ def main
 end
 
 def search_file_names
-  Dir['*'].sort_by(&:downcase)
+  options = ARGV.getopts('a')
+  file_names = options['a'] ? Dir['..', '.*', '*'] : Dir['*']
+  file_names.sort_by(&:downcase)
 end
 
 def build_file_names_table(file_names)
