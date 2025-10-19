@@ -16,9 +16,10 @@ def main
 end
 
 def search_file_names
-  options = ARGV.getopts('a')
+  options = ARGV.getopts('ar')
   file_names = options['a'] ? Dir['..', '.*', '*'] : Dir['*']
-  file_names.sort_by(&:downcase)
+  sorted_file_names = file_names.sort_by(&:downcase)
+  options['r'] ? sorted_file_names.reverse : sorted_file_names
 end
 
 def build_file_names_table(file_names)
