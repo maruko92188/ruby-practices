@@ -77,14 +77,22 @@ def create_permissions(status)
   permissions = status.mode.to_s(8)[-3..].chars.map do |octal|
     FILE_PERMISSIONS[octal.to_sym]
   end.join
-  if status.setuid?
-    permissions[2] = permissions[2].eql?('x') ? 's' : 'S'
-  elsif status.setgid?
-    permissions[5] = permissions[5].eql?('x') ? 's' : 'S'
-  elsif status.sticky?
-    permissions[8] = permissions[8].eql?('x') ? 't' : 'T'
-  end
+  apply_setuid(permissions) if status.setuid?
+  apply_setgid(permissions) if status.setgid?
+  apply_sticky(permissions) if status.sticky?
   permissions
+end
+
+def apply_setuid(permissions)
+  permissions[2] = permissions[2].eql?('x') ? 's' : 'S'
+end
+
+def apply_setgid(permissions)
+  permissions[5] = permissions[5].eql?('x') ? 's' : 'S'
+end
+
+def apply_sticky(permissions)
+  permissions[8] = permissions[8].eql?('x') ? 't' : 'T'
 end
 
 def create_last_modified_time(status)
