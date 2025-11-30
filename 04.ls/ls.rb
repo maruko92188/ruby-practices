@@ -32,7 +32,7 @@ FILE_PERMISSIONS = {
 def main
   options = ARGV.getopts('alr')
   searched_file_names = options['a'] ? Dir['..', '.*', '*'] : Dir['*']
-  sorted_file_names = search_file_names.sort_by(&:downcase)
+  sorted_file_names = searched_file_names.sort_by(&:downcase)
   file_names = options['r'] ? sorted_file_names.reverse : sorted_file_names
   options['l'] ? display_long_format(file_names) : display_column_format(file_names)
 end
