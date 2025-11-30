@@ -29,6 +29,8 @@ FILE_PERMISSIONS = {
   '7': 'rwx'
 }.freeze
 
+HALF_A_YEAR_SECONDS = (60 * 60 * 24) * (365.2425 / 2)
+
 def main
   options = ARGV.getopts('alr')
   searched_file_names = options['a'] ? Dir['..', '.*', '*'] : Dir['*']
@@ -98,13 +100,9 @@ def apply_special_permission(standard_permissions, character)
 end
 
 def create_last_modified_time(status)
-  half_a_year_seconds = (60 * 60 * 24) * (365.2425 / 2)
   differnce = Time.now - status.mtime
-  if differnce > half_a_year_seconds
-    status.mtime.strftime('%_m %e  %Y')
-  else
-    status.mtime.strftime('%_m %e %R')
-  end
+  format = differnce > HALF_A_YEAR_SECONDS ? '%_m %e  %Y' : '%_m %e %R'
+  status.mtime.strftime(format)
 end
 
 def caluculate_max_length(long_formats)
