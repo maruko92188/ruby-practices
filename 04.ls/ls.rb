@@ -41,7 +41,7 @@ def display_long_format(file_names)
   long_formats = build_long_format_table(file_names)
   total_blocks = long_formats.sum { |format| format[:blocks] }
   puts "total #{total_blocks}"
-  
+
   widths = caluculate_max_length(long_formats)
   long_formats.each do |format|
     rows = [
