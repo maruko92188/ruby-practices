@@ -74,25 +74,27 @@ def build_long_format_table(file_names)
 end
 
 def create_permissions(status)
-  permissions = status.mode.to_s(8)[-3..].chars.map do |octal|
-    FILE_PERMISSIONS[octal.to_sym]
+  octals = status.mode.to_s(8)[-3..].chars
+  special_bits = [
+    [status.setuid?, 's'],
+    [status.setgid?, 's'],
+    [status.sticky?, 't']
+  ]
+  octals.zip(special_bits).map do |octal, (is_special, character)|
+    standard_permissions = FILE_PERMISSIONS[octal.to_sym]
+    if is_special
+      apply_special_permission(standard_permissions, character)
+    else
+      standard_permissions
+    end
   end.join
-  apply_setuid(permissions) if status.setuid?
-  apply_setgid(permissions) if status.setgid?
-  apply_sticky(permissions) if status.sticky?
-  permissions
 end
 
-def apply_setuid(permissions)
-  permissions[2] = permissions[2].eql?('x') ? 's' : 'S'
-end
-
-def apply_setgid(permissions)
-  permissions[5] = permissions[5].eql?('x') ? 's' : 'S'
-end
-
-def apply_sticky(permissions)
-  permissions[8] = permissions[8].eql?('x') ? 't' : 'T'
+def apply_special_permission(standard_permissions, character)
+  read = standard_permissions[0]
+  write = standard_permissions[1]
+  execute = standard_permissions.end_with?('x') ? character : character.upcase
+  "#{read}#{write}#{execute}"
 end
 
 def create_last_modified_time(status)
