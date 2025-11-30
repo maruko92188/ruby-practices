@@ -58,8 +58,8 @@ def display_long_format(file_names)
 end
 
 def build_long_format_table(file_names)
-  status_table = file_names.map { |file_name| [file_name, File.lstat(file_name)] }
-  status_table.map do |name, status|
+  file_names.map do |file_name|
+    status = File.lstat(file_name)
     {
       file_mode: "#{ENTRY_TYPES[status.ftype.to_sym]}#{create_permissions(status)}",
       hard_links: status.nlink.to_s,
@@ -67,7 +67,7 @@ def build_long_format_table(file_names)
       group_name: Etc.getgrgid(status.gid).name,
       byte_size: status.blockdev? || status.chardev? ? format('%#x', status.rdev) : status.size.to_s,
       last_modified_time: create_last_modified_time(status),
-      path_name: status.symlink? ? "#{name} -> #{File.readlink(name)}" : name,
+      path_name: status.symlink? ? "#{file_name} -> #{File.readlink(file_name)}" : file_name,
       blocks: status.blocks
     }
   end
