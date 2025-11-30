@@ -75,12 +75,12 @@ end
 
 def create_permissions(status)
   octals = status.mode.to_s(8)[-3..].chars
-  special_bits = [
+  special_bits_table = [
     [status.setuid?, 's'],
     [status.setgid?, 's'],
     [status.sticky?, 't']
   ]
-  octals.zip(special_bits).map do |octal, (is_special, character)|
+  octals.zip(special_bits_table).map do |octal, (is_special, character)|
     standard_permissions = FILE_PERMISSIONS[octal.to_sym]
     if is_special
       apply_special_permission(standard_permissions, character)
