@@ -39,22 +39,22 @@ end
 
 def display_long_format(file_names)
   long_formats = build_long_format_table(file_names)
-  total_blocks = long_formats.map { |format| format[:blocks] }.sum
+  total_blocks = long_formats.sum { |format| format[:blocks] }
+  puts "total #{total_blocks}"
+  
   widths = caluculate_max_length(long_formats)
-
-  rows = long_formats.map do |format|
-    [
+  long_formats.each do |format|
+    rows = [
       "#{format[:file_mode]} ",
-      format[:hard_links].rjust(widths[:link_width]).to_s,
+      format[:hard_links].rjust(widths[:link_width]),
       "#{format[:owner_name].ljust(widths[:owner_width])} ",
       "#{format[:group_name].ljust(widths[:group_width])} ",
-      format[:byte_size].rjust(widths[:byte_width]).to_s,
-      format[:last_modified_time].to_s,
-      format[:path_name].to_s
+      format[:byte_size].rjust(widths[:byte_width]),
+      format[:last_modified_time],
+      format[:path_name]
     ]
+    puts rows.join(' ')
   end
-  puts "total #{total_blocks}"
-  rows.each { |row| puts row.join(' ') }
 end
 
 def build_long_format_table(file_names)
