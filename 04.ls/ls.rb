@@ -40,12 +40,12 @@ def main
 end
 
 def display_long_format(file_names)
-  long_formats = build_long_format_table(file_names)
-  total_blocks = long_formats.sum { |format| format[:blocks] }
+  long_format_table = build_long_format_table(file_names)
+  total_blocks = long_format_table.sum { |format| format[:blocks] }
   puts "total #{total_blocks}"
 
-  widths = caluculate_max_length(long_formats)
-  long_formats.each do |format|
+  widths = caluculate_max_length(long_format_table)
+  long_format_table.each do |format|
     rows = [
       "#{format[:file_mode]} ",
       format[:hard_links].rjust(widths[:link_width]),
@@ -105,12 +105,12 @@ def create_last_modified_time(status)
   status.mtime.strftime(format)
 end
 
-def caluculate_max_length(long_formats)
+def caluculate_max_length(long_format_table)
   {
-    link_width: long_formats.map { |format| format[:hard_links].size }.max,
-    owner_width: long_formats.map { |format| format[:owner_name].size }.max,
-    group_width: long_formats.map { |format| format[:group_name].size }.max,
-    byte_width: long_formats.map { |format| format[:byte_size].size }.max
+    link_width: long_format_table.map { |format| format[:hard_links].size }.max,
+    owner_width: long_format_table.map { |format| format[:owner_name].size }.max,
+    group_width: long_format_table.map { |format| format[:group_name].size }.max,
+    byte_width: long_format_table.map { |format| format[:byte_size].size }.max
   }
 end
 
