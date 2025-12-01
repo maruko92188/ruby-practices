@@ -62,14 +62,16 @@ end
 def build_long_format_table(file_names)
   file_names.map do |file_name|
     status = File.lstat(file_name)
+    byte_size = status.blockdev? || status.chardev? ? format('%#x', status.rdev) : status.size.to_s
+    path_name = status.symlink? ? "#{file_name} -> #{File.readlink(file_name)}" : file_name
     {
       file_mode: "#{ENTRY_TYPES[status.ftype.to_sym]}#{create_permissions(status)}",
       hard_links: status.nlink.to_s,
       owner_name: Etc.getpwuid(status.uid).name,
       group_name: Etc.getgrgid(status.gid).name,
-      byte_size: status.blockdev? || status.chardev? ? format('%#x', status.rdev) : status.size.to_s,
+      byte_size:,
       last_modified_time: create_last_modified_time(status),
-      path_name: status.symlink? ? "#{file_name} -> #{File.readlink(file_name)}" : file_name,
+      path_name:,
       blocks: status.blocks
     }
   end
