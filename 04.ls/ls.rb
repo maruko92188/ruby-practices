@@ -82,20 +82,20 @@ def create_permissions(status)
     [status.setgid?, 's'],
     [status.sticky?, 't']
   ]
-  octals.zip(special_bits_table).map do |octal, (is_special, character)|
+  octals.zip(special_bits_table).map do |octal, (is_special, special_symbol)|
     standard_permissions = FILE_PERMISSIONS[octal.to_sym]
     if is_special
-      apply_special_permission(standard_permissions, character)
+      apply_special_permission(standard_permissions, special_symbol)
     else
       standard_permissions
     end
   end.join
 end
 
-def apply_special_permission(standard_permissions, character)
+def apply_special_permission(standard_permissions, special_symbol)
   read = standard_permissions[0]
   write = standard_permissions[1]
-  execute = standard_permissions.end_with?('x') ? character : character.upcase
+  execute = standard_permissions.end_with?('x') ? special_symbol : special_symbol.upcase
   "#{read}#{write}#{execute}"
 end
 
