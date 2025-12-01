@@ -19,14 +19,14 @@ ENTRY_TYPES = {
 }.freeze
 
 FILE_PERMISSIONS = {
-  '0': '---',
-  '1': '--x',
-  '2': '-w-',
-  '3': '-wx',
-  '4': 'r--',
-  '5': 'r-x',
-  '6': 'rw-',
-  '7': 'rwx'
+  '0' => '---',
+  '1' => '--x',
+  '2' => '-w-',
+  '3' => '-wx',
+  '4' => 'r--',
+  '5' => 'r-x',
+  '6' => 'rw-',
+  '7' => 'rwx'
 }.freeze
 
 HALF_A_YEAR_SECONDS = (60 * 60 * 24) * (365.2425 / 2)
@@ -85,7 +85,7 @@ def create_permissions(status)
     [status.sticky?, 't']
   ]
   octals.zip(special_bits_table).map do |octal, (is_special, special_symbol)|
-    standard_permissions = FILE_PERMISSIONS[octal.to_sym]
+    standard_permissions = FILE_PERMISSIONS[octal]
     if is_special
       apply_special_permission(standard_permissions, special_symbol)
     else
