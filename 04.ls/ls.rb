@@ -44,7 +44,7 @@ def display_long_format(file_names)
   total_blocks = long_format_table.sum { |format| format[:blocks] }
   puts "total #{total_blocks}"
 
-  widths = caluculate_long_format_widths(long_format_table)
+  widths = calculate_long_format_widths(long_format_table)
   long_format_table.each do |format|
     rows = [
       "#{format[:file_mode]} ",
@@ -105,7 +105,7 @@ def create_last_modified_time(status)
   status.mtime.strftime(format)
 end
 
-def caluculate_long_format_widths(long_format_table)
+def calculate_long_format_widths(long_format_table)
   {
     link_width: long_format_table.map { |format| format[:hard_links].size }.max,
     owner_width: long_format_table.map { |format| format[:owner_name].size }.max,
