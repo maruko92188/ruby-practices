@@ -48,10 +48,10 @@ def display_long_format(file_names)
   long_format_table.each do |format|
     rows = [
       "#{format[:file_mode]} ",
-      format[:hard_links].rjust(widths[:link_width]),
-      "#{format[:owner_name].ljust(widths[:owner_width])} ",
-      "#{format[:group_name].ljust(widths[:group_width])} ",
-      format[:byte_size].rjust(widths[:byte_width]),
+      format[:hard_links].rjust(widths[:hard_links]),
+      "#{format[:owner_name].ljust(widths[:owner_name])} ",
+      "#{format[:group_name].ljust(widths[:group_name])} ",
+      format[:byte_size].rjust(widths[:byte_size]),
       format[:last_modified_time],
       format[:path_name]
     ]
@@ -107,10 +107,10 @@ end
 
 def calculate_long_format_widths(long_format_table)
   {
-    link_width: long_format_table.map { |format| format[:hard_links].size }.max,
-    owner_width: long_format_table.map { |format| format[:owner_name].size }.max,
-    group_width: long_format_table.map { |format| format[:group_name].size }.max,
-    byte_width: long_format_table.map { |format| format[:byte_size].size }.max
+    hard_links: long_format_table.map { |format| format[:hard_links].size }.max,
+    owner_name: long_format_table.map { |format| format[:owner_name].size }.max,
+    group_name: long_format_table.map { |format| format[:group_name].size }.max,
+    byte_size: long_format_table.map { |format| format[:byte_size].size }.max
   }
 end
 
