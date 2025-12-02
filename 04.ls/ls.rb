@@ -40,26 +40,26 @@ def main
 end
 
 def display_long_format(file_names)
-  long_format_table = build_long_format_table(file_names)
-  total_blocks = long_format_table.sum { |format| format[:blocks] }
+  file_status_table = build_file_status_table(file_names)
+  total_blocks = file_status_table.sum { |file_status| file_status[:blocks] }
   puts "total #{total_blocks}"
 
-  widths = create_long_format_widths(long_format_table)
-  long_format_table.each do |format|
+  widths = create_long_format_widths(file_status_table)
+  file_status_table.each do |file_status|
     rows = [
-      "#{format[:file_mode]} ",
-      format[:hard_links].rjust(widths[:hard_links]),
-      "#{format[:owner_name].ljust(widths[:owner_name])} ",
-      "#{format[:group_name].ljust(widths[:group_name])} ",
-      format[:byte_size].rjust(widths[:byte_size]),
-      format[:last_modified_time],
-      format[:path_name]
+      "#{file_status[:file_mode]} ",
+      file_status[:hard_links].rjust(widths[:hard_links]),
+      "#{file_status[:owner_name].ljust(widths[:owner_name])} ",
+      "#{file_status[:group_name].ljust(widths[:group_name])} ",
+      file_status[:byte_size].rjust(widths[:byte_size]),
+      file_status[:last_modified_time],
+      file_status[:path_name]
     ]
     puts rows.join(' ')
   end
 end
 
-def build_long_format_table(file_names)
+def build_file_status_table(file_names)
   file_names.map do |file_name|
     status = File.lstat(file_name)
     byte_size = status.blockdev? || status.chardev? ? format('%#x', status.rdev) : status.size.to_s
@@ -107,17 +107,17 @@ def create_last_modified_time(status)
   status.mtime.strftime(format)
 end
 
-def create_long_format_widths(long_format_table)
+def create_long_format_widths(file_status_table)
   {
-    hard_links: calculate_max_width(long_format_table, :hard_links),
-    owner_name: calculate_max_width(long_format_table, :owner_name),
-    group_name: calculate_max_width(long_format_table, :group_name),
-    byte_size: calculate_max_width(long_format_table, :byte_size)
+    hard_links: calculate_max_width(file_status_table, :hard_links),
+    owner_name: calculate_max_width(file_status_table, :owner_name),
+    group_name: calculate_max_width(file_status_table, :group_name),
+    byte_size: calculate_max_width(file_status_table, :byte_size)
   }
 end
 
-def calculate_max_width(long_format_table, key)
-  long_format_table.map { |format| format[key].size }.max
+def calculate_max_width(file_status_table, key)
+  file_status_table.map { |file_status| file_status[key].size }.max
 end
 
 def display_column_format(file_names)
