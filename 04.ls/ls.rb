@@ -2,24 +2,130 @@
 # frozen_string_literal: true
 
 require 'optparse'
+require 'etc'
 
 COLUMNS = 3
 TAB_WIDTH = 8
 
+ENTRY_TYPES = {
+  file: '-',
+  blockSpecial: 'b',
+  characterSpecial: 'c',
+  directory: 'd',
+  link: 'l',
+  fifo: 'p',
+  socket: 's',
+  unknown: 'w'
+}.freeze
+
+FILE_PERMISSIONS = {
+  '0' => '---',
+  '1' => '--x',
+  '2' => '-w-',
+  '3' => '-wx',
+  '4' => 'r--',
+  '5' => 'r-x',
+  '6' => 'rw-',
+  '7' => 'rwx'
+}.freeze
+
+HALF_A_YEAR_SECONDS = (60 * 60 * 24) * (365.2425 / 2)
+
 def main
-  file_names = search_file_names
+  options = ARGV.getopts('alr')
+  searched_file_names = options['a'] ? Dir['..', '.*', '*'] : Dir['*']
+  sorted_file_names = searched_file_names.sort_by(&:downcase)
+  file_names = options['r'] ? sorted_file_names.reverse : sorted_file_names
+  options['l'] ? display_long_format(file_names) : display_column_format(file_names)
+end
+
+def display_long_format(file_names)
+  long_format_table = build_long_format_table(file_names)
+  total_blocks = long_format_table.sum { |format| format[:blocks] }
+  puts "total #{total_blocks}"
+
+  widths = create_long_format_widths(long_format_table)
+  long_format_table.each do |format|
+    rows = [
+      "#{format[:file_mode]} ",
+      format[:hard_links].rjust(widths[:hard_links]),
+      "#{format[:owner_name].ljust(widths[:owner_name])} ",
+      "#{format[:group_name].ljust(widths[:group_name])} ",
+      format[:byte_size].rjust(widths[:byte_size]),
+      format[:last_modified_time],
+      format[:path_name]
+    ]
+    puts rows.join(' ')
+  end
+end
+
+def build_long_format_table(file_names)
+  file_names.map do |file_name|
+    status = File.lstat(file_name)
+    byte_size = status.blockdev? || status.chardev? ? format('%#x', status.rdev) : status.size.to_s
+    path_name = status.symlink? ? "#{file_name} -> #{File.readlink(file_name)}" : file_name
+    {
+      file_mode: "#{ENTRY_TYPES[status.ftype.to_sym]}#{create_permissions(status)}",
+      hard_links: status.nlink.to_s,
+      owner_name: Etc.getpwuid(status.uid).name,
+      group_name: Etc.getgrgid(status.gid).name,
+      byte_size:,
+      last_modified_time: create_last_modified_time(status),
+      path_name:,
+      blocks: status.blocks
+    }
+  end
+end
+
+def create_permissions(status)
+  octals = status.mode.to_s(8)[-3..].chars
+  special_bits_table = [
+    [status.setuid?, 's'],
+    [status.setgid?, 's'],
+    [status.sticky?, 't']
+  ]
+  octals.zip(special_bits_table).map do |octal, (is_special, special_symbol)|
+    standard_permissions = FILE_PERMISSIONS[octal]
+    if is_special
+      apply_special_permission(standard_permissions, special_symbol)
+    else
+      standard_permissions
+    end
+  end.join
+end
+
+def apply_special_permission(standard_permissions, special_symbol)
+  read = standard_permissions[0]
+  write = standard_permissions[1]
+  execute = standard_permissions.end_with?('x') ? special_symbol : special_symbol.upcase
+  "#{read}#{write}#{execute}"
+end
+
+def create_last_modified_time(status)
+  differnce = Time.now - status.mtime
+  format = differnce > HALF_A_YEAR_SECONDS ? '%_m %e  %Y' : '%_m %e %R'
+  status.mtime.strftime(format)
+end
+
+def create_long_format_widths(long_format_table)
+  {
+    hard_links: calculate_max_width(long_format_table, :hard_links),
+    owner_name: calculate_max_width(long_format_table, :owner_name),
+    group_name: calculate_max_width(long_format_table, :group_name),
+    byte_size: calculate_max_width(long_format_table, :byte_size)
+  }
+end
+
+def calculate_max_width(long_format_table, key)
+  long_format_table.map { |format| format[key].size }.max
+end
+
+def display_column_format(file_names)
   return if file_names.empty?
 
   build_file_names_table(file_names).each do |row|
     puts row.join.rstrip
   end
-end
-
-def search_file_names
-  options = ARGV.getopts('ar')
-  file_names = options['a'] ? Dir['..', '.*', '*'] : Dir['*']
-  sorted_file_names = file_names.sort_by(&:downcase)
-  options['r'] ? sorted_file_names.reverse : sorted_file_names
 end
 
 def build_file_names_table(file_names)
