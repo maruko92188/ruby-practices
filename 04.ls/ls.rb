@@ -53,14 +53,14 @@ def display_long_format(file_names)
   total_blocks = file_status_table.sum { |file_status| file_status[:blocks] }
   puts "total #{total_blocks}"
 
-  widths = build_widths_table(file_status_table)
+  widths_table = build_widths_table(file_status_table)
   file_status_table.each do |file_status|
     rows = [
       "#{file_status[:file_mode]} ",
-      file_status[:hard_links].rjust(widths[:hard_links]),
-      "#{file_status[:owner_name].ljust(widths[:owner_name])} ",
-      "#{file_status[:group_name].ljust(widths[:group_name])} ",
-      file_status[:byte_size].rjust(widths[:byte_size]),
+      file_status[:hard_links].rjust(widths_table[:hard_links]),
+      "#{file_status[:owner_name].ljust(widths_table[:owner_name])} ",
+      "#{file_status[:group_name].ljust(widths_table[:group_name])} ",
+      file_status[:byte_size].rjust(widths_table[:byte_size]),
       file_status[:last_modified_time],
       file_status[:path_name]
     ]
