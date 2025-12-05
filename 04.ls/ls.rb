@@ -48,7 +48,7 @@ def display_long_format(file_names)
   total_blocks = file_status_table.sum { |file_status| file_status[:blocks] }
   puts "total #{total_blocks}"
 
-  widths = create_long_format_widths(file_status_table)
+  widths = build_widths_table(file_status_table)
   file_status_table.each do |file_status|
     rows = [
       "#{file_status[:file_mode]} ",
@@ -69,19 +69,19 @@ def build_file_status_table(file_names)
     byte_size = status.blockdev? || status.chardev? ? format('%#x', status.rdev) : status.size.to_s
     path_name = status.symlink? ? "#{file_name} -> #{File.readlink(file_name)}" : file_name
     {
-      file_mode: "#{ENTRY_TYPES[status.ftype.to_sym]}#{create_permissions(status)}",
+      file_mode: "#{ENTRY_TYPES[status.ftype.to_sym]}#{determine_permissions(status)}",
       hard_links: status.nlink.to_s,
       owner_name: Etc.getpwuid(status.uid).name,
       group_name: Etc.getgrgid(status.gid).name,
       byte_size:,
-      last_modified_time: create_last_modified_time(status),
+      last_modified_time: determine_last_modified_time(status),
       path_name:,
       blocks: status.blocks
     }
   end
 end
 
-def create_permissions(status)
+def determine_permissions(status)
   octals = status.mode.to_s(8)[-3..].chars
   special_bits_table = [
     [status.setuid?, 's'],
@@ -105,13 +105,13 @@ def apply_special_permission(standard_permissions, special_symbol)
   "#{read}#{write}#{execute}"
 end
 
-def create_last_modified_time(status)
+def determine_last_modified_time(status)
   differnce = Time.now - status.mtime
   format = differnce > HALF_A_YEAR_SECONDS ? '%_m %e  %Y' : '%_m %e %R'
   status.mtime.strftime(format)
 end
 
-def create_long_format_widths(file_status_table)
+def build_widths_table(file_status_table)
   {
     hard_links: calculate_max_width(file_status_table, :hard_links),
     owner_name: calculate_max_width(file_status_table, :owner_name),
