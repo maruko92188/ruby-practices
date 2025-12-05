@@ -29,6 +29,11 @@ FILE_PERMISSIONS = {
   '7' => 'rwx'
 }.freeze
 
+PERMISSION_FIELDS = {
+  read: 0,
+  write: 1
+}.freeze
+
 HALF_A_YEAR_SECONDS = (60 * 60 * 24) * (365.2425 / 2)
 
 def main
@@ -99,8 +104,8 @@ def determine_permissions(status)
 end
 
 def apply_special_permission(standard_permissions, special_symbol)
-  read = standard_permissions[0]
-  write = standard_permissions[1]
+  read = standard_permissions[PERMISSION_FIELDS[:read]]
+  write = standard_permissions[PERMISSION_FIELDS[:write]]
   execute = standard_permissions.end_with?('x') ? special_symbol : special_symbol.upcase
   "#{read}#{write}#{execute}"
 end
