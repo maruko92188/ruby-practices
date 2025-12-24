@@ -3,6 +3,8 @@
 
 require 'optparse'
 
+WIDTH = 8
+
 def main
   options = parse_options
   command_arguments = ARGV
@@ -26,9 +28,9 @@ end
 
 def display_input_from_pipe(options)
   contents = $stdin.read
-  lines = contents.count("\n").to_s.rjust(8)
-  words =  contents.split(' ').size.to_s.rjust(8)
-  byte = contents.size.to_s.rjust(8)
+  lines = contents.count("\n").to_s.rjust(WIDTH)
+  words =  contents.split(' ').size.to_s.rjust(WIDTH)
+  byte = contents.size.to_s.rjust(WIDTH)
   row = []
   row << lines if options[:lines]
   row << words if options[:words]
@@ -54,9 +56,9 @@ def format_row_table(command_arguments)
   file_names.map do |file_name|
     contents = File.read(file_name)
     {
-      lines: contents.count("\n").to_s.rjust(8),
-      words: contents.split(' ').size.to_s.rjust(8),
-      byte: contents.size.to_s.rjust(8),
+      lines: contents.count("\n").to_s.rjust(WIDTH),
+      words: contents.split(' ').size.to_s.rjust(WIDTH),
+      byte: contents.size.to_s.rjust(WIDTH),
       file_name: " #{file_name}"
     }
   end
@@ -65,7 +67,7 @@ end
 ef display_total(row_table, options)
   total_table = %i[lines words byte].to_h do |key|
     total_count = row_table.sum { |rows| rows[key].to_i}
-    [key, total_count.to_s.rjust(8)]
+    [key, total_count.to_s.rjust(WIDTH)]
   end
   total_row = []
   total_row << total_table[:lines] if options[:lines]
