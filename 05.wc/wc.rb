@@ -23,9 +23,7 @@ def parse_options
   opt.on('-c') { options[:byte] = true }
   opt.parse!(ARGV)
 
-  if options.values.none?
-    options.transform_values! { |value| true}
-  end
+  options.transform_values! { |_value| true } if options.values.none?
   options
 end
 
@@ -38,11 +36,12 @@ def build_target_table
 end
 
 def build_content_table(target)
-  content = if target[:input] == $stdin
-    target[:input].read
-  else
-    File.read(target[:input])
-  end
+  content =
+    if target[:input] == $stdin
+      target[:input].read
+    else
+      File.read(target[:input])
+    end
   { content:, name: target[:name] }
 end
 
