@@ -7,9 +7,9 @@ WIDTH = 8
 
 def main
   options = parse_options
-  tergets = ARGV.empty? ? [$stdin] : ARGV
+  tergets = build_target_table
   tergets.each do |terget|
-    content_table = collect_content(terget)
+    content_table = build_content_table(terget)
     row_table = format_row_table(content_table)
     display_row(row_table, options)
   end
@@ -29,10 +29,21 @@ def parse_options
   options
 end
 
-def collect_content(terget)
-  content = ARGV.empty? ? terget.read : File.read(terget)
-  name = ARGV.empty? ? nil : "#{terget}"
-  { content:, name: }
+def build_target_table
+  if ARGV.empty?
+    [{ input: $stdin, name: nil }]
+  else
+    ARGV.map { |file_name| { input: file_name, name: file_name } }
+  end
+end
+
+def build_content_table(terget)
+  content = if terget[:input] == $stdin
+    terget[:input].read
+  else
+    File.read(terget[:input])
+  end
+  { content:, name: terget[:name] }
 end
 
 def format_row_table(content_table)
