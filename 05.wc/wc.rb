@@ -46,7 +46,7 @@ end
 
 def display_row(row_table, options)
   row = %i[lines words byte].map do |key|
-  row_table[key] if options[key]
+    row_table[key] if options[key]
   end
   row << row_table[:name]
   puts row.join
