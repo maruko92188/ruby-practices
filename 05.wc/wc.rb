@@ -48,16 +48,16 @@ end
 
 def format_row_table(content_table)
   {
-    lines: content_table[:content].count("\n").to_s.rjust(WIDTH),
-    words: content_table[:content].split(' ').size.to_s.rjust(WIDTH),
-    byte: content_table[:content].size.to_s.rjust(WIDTH),
+    lines: content_table[:content].count("\n"),
+    words: content_table[:content].split(' ').size,
+    byte: content_table[:content].size,
     name: " #{content_table[:name]}"
   }
 end
 
 def display_row(row_table, options)
   row = %i[lines words byte].map do |key|
-    row_table[key] if options[key]
+    row_table[key].to_s.rjust(WIDTH) if options[key]
   end
   row << row_table[:name]
   puts row.join
