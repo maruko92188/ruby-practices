@@ -45,10 +45,9 @@ def format_row_table(content_table)
 end
 
 def display_row(row_table, options)
-  row = []
-  row << row_table[:lines] if options[:lines]
-  row << row_table[:words] if options[:words]
-  row << row_table[:byte] if options[:byte]
+  row = %i[lines words byte].map do |key|
+  row_table[key] if options[key]
+  end
   row << row_table[:name]
   puts row.join
 end
