@@ -9,9 +9,10 @@ def main
   options = parse_options
   tergets = ARGV.empty? ? [$stdin] : ARGV
   tergets.each do |terget|
-    content = collect_content(terget)
+    content_table = collect_content(terget)
     row_table = format_row_table(content_table)
     display_row(row_table, options)
+  end
 end
 
 def parse_options
