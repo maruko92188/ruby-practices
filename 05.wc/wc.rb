@@ -7,9 +7,9 @@ WIDTH = 8
 
 def main
   options = parse_options
-  tergets = build_target_table
-  tergets.each do |terget|
-    content_table = build_content_table(terget)
+  targets = build_target_table
+  targets.each do |target|
+    content_table = build_content_table(target)
     row_table = format_row_table(content_table)
     display_row(row_table, options)
   end
@@ -37,13 +37,13 @@ def build_target_table
   end
 end
 
-def build_content_table(terget)
-  content = if terget[:input] == $stdin
-    terget[:input].read
+def build_content_table(target)
+  content = if target[:input] == $stdin
+    target[:input].read
   else
-    File.read(terget[:input])
+    File.read(target[:input])
   end
-  { content:, name: terget[:name] }
+  { content:, name: target[:name] }
 end
 
 def format_row_table(content_table)
