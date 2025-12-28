@@ -23,7 +23,7 @@ def parse_options
   opt.on('-c') { options[:byte] = true }
   opt.parse!(ARGV)
 
-  options.transform_values! { |_value| true } if options.values.none?
+  options.each_key { |key| options[key] = true } if options.values.none?
   options
 end
 
