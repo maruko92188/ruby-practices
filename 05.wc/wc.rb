@@ -8,11 +8,8 @@ WIDTH = 8
 def main
   options = parse_options
   targets = build_target_table
-  targets.each do |target|
-    content_table = build_content_table(target)
-    row_table = format_row_table(content_table)
-    display_row(row_table, options)
-  end
+  count_table = format_count_table(targets)
+  display_rows(count_table, options)
 end
 
 def parse_options
@@ -35,31 +32,36 @@ def build_target_table
   end
 end
 
-def build_content_table(target)
-  content =
-    if target[:input] == $stdin
-      target[:input].read
-    else
-      File.read(target[:input])
-    end
-  { content:, name: target[:name] }
-end
-
-def format_row_table(content_table)
-  {
+def format_count_table(targets)
+  targets.map do |target|
+    content_table = build_content_table(target)
+    {
     lines: content_table[:content].count("\n"),
     words: content_table[:content].split(' ').size,
     byte: content_table[:content].size,
     name: " #{content_table[:name]}"
-  }
+    }
+  end
 end
 
-def display_row(row_table, options)
-  row = %i[lines words byte].map do |key|
-    row_table[key].to_s.rjust(WIDTH) if options[key]
+def build_content_table(target)
+  content =
+  if target[:input] == $stdin
+    target[:input].read
+  else
+    File.read(target[:input])
   end
-  row << row_table[:name]
-  puts row.join
+  { content:, name: target[:name] }
+end
+
+def display_rows(count_table, options)
+  count_table.each do |count|
+    row = %i[lines words byte].map do |key|
+      count[key].to_s.rjust(WIDTH) if options[key]
+    end
+    row << count[:name]
+    puts row.join.rstrip
+  end
 end
 
 main
