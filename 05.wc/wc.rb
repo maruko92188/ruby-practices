@@ -37,21 +37,21 @@ def format_count_table(targets)
   targets.map do |target|
     content_table = build_content_table(target)
     {
-    lines: content_table[:content].count("\n"),
-    words: content_table[:content].split(' ').size,
-    byte: content_table[:content].size,
-    name: " #{content_table[:name]}"
+      lines: content_table[:content].count("\n"),
+      words: content_table[:content].split(' ').size,
+      byte: content_table[:content].size,
+      name: " #{content_table[:name]}"
     }
   end
 end
 
 def build_content_table(target)
   content =
-  if target[:input] == $stdin
-    target[:input].read
-  else
-    File.read(target[:input])
-  end
+    if target[:input] == $stdin
+      target[:input].read
+    else
+      File.read(target[:input])
+    end
   { content:, name: target[:name] }
 end
 
