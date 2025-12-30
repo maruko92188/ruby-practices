@@ -10,6 +10,7 @@ def main
   targets = build_target_table
   count_table = format_count_table(targets)
   display_rows(count_table, options)
+  display_total(count_table, options) if targets.size > 1
 end
 
 def parse_options
@@ -61,6 +62,22 @@ def display_rows(count_table, options)
     end
     row << count[:name]
     puts row.join.rstrip
+  end
+end
+
+def display_total(count_table, options)
+  totals = calculate_totals(count_table)
+  row = totals.map do |key, total|
+    total.to_s.rjust(WIDTH) if options[key]
+  end
+  row << ' total'
+  puts row.join
+end
+
+def calculate_totals(count_table)
+  %i[lines words byte].to_h do |key|
+    total = count_table.sum { |count| count[key] }
+    [key, total]
   end
 end
 
