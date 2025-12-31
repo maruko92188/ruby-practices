@@ -14,11 +14,11 @@ def main
 end
 
 def parse_options
-  options = { lines: false, words: false, byte: false }
+  options = { lines: false, words: false, bytes: false }
   opt = OptionParser.new
   opt.on('-l') { options[:lines] = true }
   opt.on('-w') { options[:words] = true }
-  opt.on('-c') { options[:byte] = true }
+  opt.on('-c') { options[:bytes] = true }
   opt.parse!(ARGV)
 
   options.each_key { |key| options[key] = true } if options.values.none?
@@ -39,7 +39,7 @@ def format_count_table(targets)
     {
       lines: content[:content].count("\n"),
       words: content[:content].split(' ').size,
-      byte: content[:content].size,
+      bytes: content[:content].size,
       name: " #{content[:name]}"
     }
   end
@@ -57,7 +57,7 @@ end
 
 def display_rows(count_table, options)
   count_table.each do |count|
-    row = %i[lines words byte].map do |key|
+    row = %i[lines words bytes].map do |key|
       count[key].to_s.rjust(WIDTH) if options[key]
     end
     row << count[:name]
@@ -75,7 +75,7 @@ def display_total(count_table, options)
 end
 
 def calculate_totals(count_table)
-  %i[lines words byte].to_h do |key|
+  %i[lines words bytes].to_h do |key|
     total = count_table.sum { |count| count[key] }
     [key, total]
   end
