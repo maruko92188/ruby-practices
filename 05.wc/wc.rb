@@ -35,7 +35,7 @@ end
 
 def format_count_table(targets)
   targets.map do |target|
-    content = fetch_content(target)
+    content = load_content(target)
     {
       lines: content[:content].count("\n"),
       words: content[:content].split(' ').size,
@@ -45,7 +45,7 @@ def format_count_table(targets)
   end
 end
 
-def fetch_content(target)
+def load_content(target)
   content =
     if target[:input] == $stdin
       target[:input].read
