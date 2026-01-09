@@ -3,7 +3,7 @@
 
 require 'optparse'
 
-WIDTH = 8
+MIN_DIGITS = 7
 
 def main
   options = parse_options
@@ -40,7 +40,7 @@ def format_count_table(targets)
       lines: content[:content].count("\n"),
       words: content[:content].split(' ').size,
       bytes: content[:content].size,
-      name: " #{content[:name]}"
+      name: content[:name]
     }
   end
 end
@@ -58,9 +58,9 @@ end
 def display_rows(count_table, options)
   count_table.each do |count|
     row = %i[lines words bytes].map do |key|
-      count[key].to_s.rjust(WIDTH) if options[key]
+      " #{count[key].to_s.rjust(MIN_DIGITS)}" if options[key]
     end
-    row << count[:name]
+    row << " #{count[:name]}"
     puts row.join.rstrip
   end
 end
@@ -68,7 +68,7 @@ end
 def display_total(count_table, options)
   totals = calculate_totals(count_table)
   row = totals.map do |key, total|
-    total.to_s.rjust(WIDTH) if options[key]
+    " #{total.to_s.rjust(MIN_DIGITS)}" if options[key]
   end
   row << ' total'
   puts row.join
