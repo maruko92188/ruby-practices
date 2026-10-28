@@ -19,7 +19,7 @@ class Frame
   end
 
   def open_frame?
-    @shots < FULL_SCORE
+    sum < FULL_SCORE
   end
 
   def double?(next_frame)
