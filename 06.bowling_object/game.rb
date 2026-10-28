@@ -13,7 +13,7 @@ class Game
   end
 
   def score
-    socre = @frames.each_cons(3).take(9).sum do |current_frame, next_frame, after_next_frame|
+    score = @frames.each_cons(3).take(9).sum do |current_frame, next_frame, after_next_frame|
       current_frame.score(current_frame, next_frame, after_next_frame)
     end
     score + @frames.drop(9).sum(&:sum)
