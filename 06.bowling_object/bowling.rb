@@ -3,4 +3,4 @@
 require_relative './game.rb'
 
 game = Game.new(ARGV[0])
-game.score
+puts game.score
