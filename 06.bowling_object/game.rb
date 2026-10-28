@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-require_relative './frame.rb'
+require_relative './frame'
 
 class Game
-
   STRIKE = 'X'
-  STRIKE_SHOTS = [10, 0]
+  STRIKE_SHOTS = [10, 0].freeze
 
   def initialize(result)
     pins = parse_result(result)
@@ -22,6 +21,6 @@ class Game
   private
 
   def parse_result(result)
-    result.split(',').flat_map { |shot| shot == STRIKE ? STRIKE_SHOTS : shot.to_i}
+    result.split(',').flat_map { |shot| shot == STRIKE ? STRIKE_SHOTS : shot.to_i }
   end
 end

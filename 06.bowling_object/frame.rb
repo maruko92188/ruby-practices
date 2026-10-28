@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Frame
-
   FULL_SCORE = 10
 
   def initialize(shots)
@@ -9,7 +8,7 @@ class Frame
   end
 
   def self.build(pins)
-    pins.each_slice(2).map { |shots| Frame.new(shots)}
+    pins.each_slice(2).map { |shots| Frame.new(shots) }
   end
 
   def score(next_frame, after_next_frame)
