@@ -15,9 +15,10 @@ class Frame
     pins.each_slice(2).map { |shots| Frame.new(shots)}
   end
 
-  def score()
-    # フレームごとのスコアを計算する
-    # ボーナスの計算のために、2つ先までのフレームの情報が必要
+  def score(current_frame, next_frame, after_next_frame)
+    return sum if open_frame?
+
+    sum + bonus(next_frame, after_next_frame)
   end
 
   def open_frame?
@@ -42,5 +43,15 @@ class Frame
 
   def sum
     @shots.sum
+  end
+
+  def bonus(next_frame, after_next_frame)
+    if double?(next_frame)
+      FULL_SCORE + after_next_frame.first_shot
+    elsif strike?
+      next_frame.sum
+    elsif spare?
+      next_frame.first_shot
+    end
   end
 end

@@ -14,7 +14,10 @@ class Game
   end
 
   def score
-    # Frameに計算用のデータを渡してスコア計算をさせる
+    socre = @frames.each_cons(3).take(9).sum do |current_frame, next_frame, after_next_frame|
+      current_frame.score(next_frame, after_next_frame)
+    end
+    score + @frames.drop(9).sum(&:sum)
   end
 
   def parse_result(result)
