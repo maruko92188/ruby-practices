@@ -12,7 +12,7 @@ class Frame
     pins.each_slice(2).map { |shots| Frame.new(shots)}
   end
 
-  def score(current_frame, next_frame, after_next_frame)
+  def score(next_frame, after_next_frame)
     return sum if open_frame?
 
     sum + bonus(next_frame, after_next_frame)
