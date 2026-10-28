@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
+require_relative './frame.rb'
+
 class Game
-  # 入力値から倒したピンの本数を保持した配列を作る
-  # 倒したピンの本数をFramに渡して計算用のデータを作ってもらう
-  # 計算用のデータをFrameに渡してスコアを計算してもらう
 
   STRIKE = 'X'
   STRIKE_SHOTS = [10, 0]
@@ -19,6 +18,8 @@ class Game
     end
     score + @frames.drop(9).sum(&:sum)
   end
+
+  private
 
   def parse_result(result)
     result.split(',').flat_map { |shot| shot == STRIKE ? STRIKE_SHOTS : shot.to_i}

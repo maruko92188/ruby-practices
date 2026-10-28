@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class Frame
-  # Gameから受け取った倒したピンの本数の情報から計算用のデータをつくる
-  # フレームごとのスコアを計算する
-  # フレームの状態（オープン？ストライク？など）を判定する
 
   FULL_SCORE = 10
 
@@ -44,6 +41,8 @@ class Frame
   def sum
     @shots.sum
   end
+
+  private
 
   def bonus(next_frame, after_next_frame)
     if double?(next_frame)
