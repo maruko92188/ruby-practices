@@ -31,7 +31,7 @@ class Frame
   end
 
   def spare?
-    !strike && sum == FULL_SCORE
+    !strike? && sum == FULL_SCORE
   end
 
   def first_shot
