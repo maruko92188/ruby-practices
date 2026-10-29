@@ -11,8 +11,10 @@ class Game
     @frames = Frame.build(pins)
   end
 
-  def score
-    score = @frames.each_cons(3).take(9).sum do |current_frame, next_frame, after_next_frame|
+    def score
+    score = @frames[0..8].each_with_index.sum do |current_frame, index|
+      next_frame = @frames[index.next]
+      after_next_frame = @frames[index.next.next]
       current_frame.score(next_frame, after_next_frame)
     end
     score + @frames.drop(9).sum(&:sum)
