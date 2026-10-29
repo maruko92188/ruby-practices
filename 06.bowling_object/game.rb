@@ -11,7 +11,7 @@ class Game
     @frames = Frame.build(pins)
   end
 
-    def score
+  def score
     score = @frames[0..8].each_with_index.sum do |current_frame, index|
       next_frame = @frames[index.next]
       after_next_frame = @frames[index.next.next]
