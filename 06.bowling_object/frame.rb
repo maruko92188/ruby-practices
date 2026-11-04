@@ -1,55 +1,63 @@
 # frozen_string_literal: true
 
 class Frame
-  FULL_SCORE = 10
+  FULL_ROLLS = 2
 
   def initialize(shots)
     @shots = shots
   end
 
-  def self.build(pins)
-    pins.each_slice(2).map { |shots| Frame.new(shots) }
-  end
-
   def score(next_frame, after_next_frame)
-    return sum if open_frame?
+    return sum if last?(next_frame) || open?
 
     sum + bonus(next_frame, after_next_frame)
   end
 
-  def open_frame?
-    sum < FULL_SCORE
+  def last?(next_frame)
+    next_frame.nil?
   end
 
-  def double?(next_frame)
-    strike? && next_frame.strike?
+  def open?
+    sum < Shot::FULL_SCORE
   end
 
   def strike?
-    first_shot == FULL_SCORE
+    first_shot.strike?
   end
 
   def spare?
-    !strike? && sum == FULL_SCORE
+    !strike? && sum == Shot::FULL_SCORE
   end
 
   def first_shot
     @shots.first
   end
 
+  def second_shot
+    @shots[1]
+  end
+
   def sum
-    @shots.sum
+    @shots.sum(&:pins)
+  end
+
+  def shot_count
+    @shots.size
   end
 
   private
 
   def bonus(next_frame, after_next_frame)
-    if double?(next_frame)
-      FULL_SCORE + after_next_frame.first_shot
-    elsif strike?
-      next_frame.sum
-    elsif spare?
-      next_frame.first_shot
+    return next_frame.first_shot.pins if spare?
+
+    if after_next_frame.nil?
+      next_frame.first_shot.pins + next_frame.second_shot.pins
+    else
+      next_frame.sum + (full_rolls?(next_frame) ? 0 : after_next_frame.first_shot.pins)
     end
+  end
+
+  def full_rolls?(next_frame)
+    next_frame.shot_count == FULL_ROLLS
   end
 end
