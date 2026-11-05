@@ -48,13 +48,15 @@ class Frame
   private
 
   def bonus(next_frame, after_next_frame)
-    return next_frame.first_shot.pins if spare?
+    next_pins = next_frame.first_shot.pins
+    return next_pins if spare?
 
-    if after_next_frame.nil?
-      next_frame.first_shot.pins + next_frame.second_shot.pins
-    else
-      next_frame.sum + (full_rolls?(next_frame) ? 0 : after_next_frame.first_shot.pins)
-    end
+    next_pins +
+      if after_next_frame.nil? || full_rolls?(next_frame)
+        next_frame.second_shot.pins
+      else
+        after_next_frame.first_shot.pins
+      end
   end
 
   def full_rolls?(next_frame)
