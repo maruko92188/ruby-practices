@@ -8,13 +8,9 @@ class Frame
   end
 
   def score(next_frame = nil, after_next_frame = nil)
-    return sum if last?(next_frame) || open?
+    return sum if next_frame.nil? || open?
 
     sum + bonus(next_frame, after_next_frame)
-  end
-
-  def last?(next_frame)
-    next_frame.nil?
   end
 
   def open?
