@@ -7,7 +7,7 @@ class Frame
     @shots = shots
   end
 
-  def score(next_frame, after_next_frame)
+  def score(next_frame = nil, after_next_frame = nil)
     return sum if last?(next_frame) || open?
 
     sum + bonus(next_frame, after_next_frame)
