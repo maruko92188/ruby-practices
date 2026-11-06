@@ -20,8 +20,8 @@ class Game
   def build_frame(rolls)
     shots = rolls.map { |roll| Shot.new(roll) }
     frames = 9.times.map do
-      frame_shots = shots.first.strike? ? shots.shift : shots.shift(Frame::FULL_ROLLS)
-      Frame.new([*frame_shots])
+      frame_shots = shots.first.strike? ? shots.shift(1) : shots.shift(2)
+      Frame.new(frame_shots)
     end
     frames << Frame.new(shots)
   end
